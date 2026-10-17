@@ -1,0 +1,18 @@
+{
+  "name": "next-static-export-proof",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "next build",
+    "start": "serve out --config ../serve.json --no-clipboard --no-port-switching",
+    "proof": "node prove-static-export.mjs"
+  },
+  "dependencies": {
+    "serve": "14.2.6"
+  },
+  "devDependencies": {
+    "next": "14.2.30",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

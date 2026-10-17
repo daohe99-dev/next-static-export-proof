@@ -1,0 +1,69 @@
+{
+  "verified_at_utc": "2026-10-17T11:14:48.700Z",
+  "fixture_only": true,
+  "next": "14.2.30",
+  "serve": "14.2.6",
+  "node": "v25.2.1",
+  "original_error": "\"next start\" does not work with \"output: export\" configuration",
+  "checks": [
+    {
+      "name": "Next14.2.30 static export builds successfully",
+      "passed": true
+    },
+    {
+      "name": "Export contains index.html",
+      "passed": true
+    },
+    {
+      "name": "Export contains about.html",
+      "passed": true
+    },
+    {
+      "name": "Export contains 404.html",
+      "passed": true
+    },
+    {
+      "name": "Original next start failure reproduced",
+      "passed": true
+    },
+    {
+      "name": "Pinned static server honors runtime PORT and serves home",
+      "passed": true
+    },
+    {
+      "name": "Direct deep route /about serves its own exported HTML",
+      "passed": true
+    },
+    {
+      "name": "Generated css asset serves exact exported bytes",
+      "passed": true
+    },
+    {
+      "name": "Generated js asset serves exact exported bytes",
+      "passed": true
+    },
+    {
+      "name": "Unknown route returns custom404, without SPA fallback",
+      "passed": true
+    },
+    {
+      "name": "Missing JS asset returns404, not a200 home page",
+      "passed": true
+    },
+    {
+      "name": "Directory browsing is disabled",
+      "passed": true
+    },
+    {
+      "name": "Static server accepts a local non-loopback IPv4 connection",
+      "passed": true
+    }
+  ],
+  "passed": 13,
+  "failed": 0,
+  "network_bind": "PASS; address omitted",
+  "docker_image_built_or_run": false,
+  "railway_deployment_tested": false,
+  "owner_data_used": false,
+  "cash_spent_sgd": 0
+}

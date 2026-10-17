@@ -1,0 +1,8 @@
+{
+  "name": "next-static-export-runtime",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "serve": "14.2.6"
+  }
+}

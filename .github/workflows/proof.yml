@@ -1,0 +1,40 @@
+name: Static export proof
+on: [push, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NO_UPDATE_CHECK: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - run: npm run proof
+      - name: Build actual Docker image
+        run: docker build --tag static-export-proof .
+      - name: Test actual Docker runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'docker rm -f static-export-proof >/dev/null 2>&1 || true' EXIT
+          docker run -d --name static-export-proof -e PORT=4317 -p 127.0.0.1:4317:4317 static-export-proof
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:4317/ -o /tmp/static-home; then break; fi
+            sleep 1
+          done
+          grep -q STATIC_HOME_PROOF /tmp/static-home
+          curl --silent --fail http://127.0.0.1:4317/about | grep -q STATIC_ABOUT_PROOF
+          test "$(curl --silent -o /tmp/static-404 -w '%{http_code}' http://127.0.0.1:4317/missing-route)" = 404
+          grep -q STATIC_NOT_FOUND_PROOF /tmp/static-404
+          test "$(curl --silent -o /dev/null -w '%{http_code}' http://127.0.0.1:4317/_next/static/missing.js)" = 404
+          test "$(docker exec static-export-proof id -u)" != 0
+          docker exec static-export-proof node -e "require('node:assert/strict').throws(() => require.resolve('next'))"
+          echo 'Docker runtime: home/deep route/custom404/missing asset/nonroot/no Next server PASS'
+      - name: Record concise result without stored artifacts
+        run: cat proof-result.json >> "$GITHUB_STEP_SUMMARY"
